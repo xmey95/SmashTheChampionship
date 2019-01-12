@@ -1,0 +1,14 @@
+{
+  "name": "SmashTheChampionship",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:xmey95/SmashTheChampionship.git",
+  "author": "xmey95 <xmey95@gmail.com>",
+  "license": "GPL-3",
+  "scripts": {
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^4.0.1"
+  }
+}
