@@ -6,6 +6,18 @@ export default {
   name: 'HelloWorld',
   props: {
     msg: String
+  },
+  data: function () {
+    return {
+      files: []
+    }
+  },
+  created: function () {
+    var homedir = require('os').homedir();
+    var dir = "/.smashthechampionship";
+    //fs.readdir(homedir + dir, (err, content) => {
+      //this.files = content
+    //});
   }
 }
 </script>
