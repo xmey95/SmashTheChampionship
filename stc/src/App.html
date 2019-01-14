@@ -1,4 +1,29 @@
 <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <md-toolbar class="md-primary" md-elevation="1">
+      <h3 class="md-title" style="flex: 1">SmashTheChampionship</h3>
+      <md-button v-on:click="saveAll()">
+        Save
+      </md-button>
+    </md-toolbar>
   </div>
+  <div class="md-layout">
+    <div class="md-layout-item md-size-25">
+        <md-dialog :md-active.sync="showDialog">
+            <md-dialog-title>Create Match</md-dialog-title>
+            <md-dialog-actions>
+              <md-button class="md-primary" v-on:click="newMatch()">Create</md-button>
+              <md-button class="md-danger" @click="showDialog = false">Close</md-button>
+            </md-dialog-actions>
+          </md-dialog>
+      <md-button v-on:click="showDialog = true" class="md-primary md-raised">New</md-button>
+      <md-list>
+        <md-list-item v-for="match in matchs" v-bind:data="match" v-bind:key="match.name">
+          <span class="md-list-item-text">{{ match.name }}</span>
+        </md-list-item>
+      </md-list>
+    </div>
+    <div class="md-layout-item"></div>
+  </div>
+  <HelloWorld msg="Welcome to Your Vue.js App" />
+</div>
