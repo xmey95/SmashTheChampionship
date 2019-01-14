@@ -1,18 +1,54 @@
 <template src="./App.html">
+
 </template>
 
 <script>
+import {
+    validationMixin
+} from 'vuelidate'
+import {
+    required,
+    minLength
+} from 'vuelidate/lib/validators'
+
 import HelloWorld from './components/HelloWorld/HelloWorld.vue'
 
 export default {
-  name: 'app',
-  components: {
-    HelloWorld
-  },
-  data: function () {
+    name: 'app',
+    mixins: [validationMixin],
+    components: {
+        HelloWorld
+    },
+    data: function () {
         return {
             matchs: [],
-            showDialog: false
+            showDialog: false,
+            form: {
+                name: null,
+                championship: null,
+                home: null,
+                away: null,
+            },
+            matchCreated: false
+        }
+    },
+    validations: {
+        form: {
+            name: {
+                required,
+                minLength: minLength(3)
+            },
+            home: {
+                required,
+                minLength: minLength(3)
+            },
+            away: {
+                required,
+                minLength: minLength(3)
+            },
+            championship: {
+                required
+            }
         }
     },
     created() {
@@ -27,32 +63,51 @@ export default {
     methods: {
 
         newMatch() {
-            var match = {
-              "id": this.matchs.length,
-              "name": "Prova",
-              "home": "Utente1",
-              "away": "Utente2",
-              "listAway": [
-                "Inter",
-                "Juventus",
-                "Lazio"
-              ],
-              "listHome": [
-                "Milan",
-                "Empoli",
-                "Sampdoria"
-              ],
-              "nextHome": "Milan",
-              "nextAway": "Sampdoria"
-            }
+            this.$v.$touch()
 
-            this.matchs.push(match);
-            this.saveAll();
+            if (!this.$v.$invalid) {
+                var match = {
+                    "id": this.matchs.length,
+                    "name": this.form.name,
+                    "home": this.form.home,
+                    "away": this.form.away,
+                    "listAway": [],
+                    "listHome": [],
+                    "nextHome": null,
+                    "nextAway": null
+                }
+
+                this.matchs.push(match);
+                this.saveAll();
+                this.clearForm();
+                this.showDialog = false;
+            }
         },
-        
+
         saveAll() {
             const parsed = JSON.stringify(this.matchs);
             localStorage.setItem('matchs', parsed);
+        },
+
+        getValidationClass(fieldName) {
+            const field = this.$v.form[fieldName]
+
+            if (field) {
+                return {
+                    'md-invalid': field.$invalid && field.$dirty
+                }
+            }
+        },
+        closeDialog() {
+            this.showDialog = false
+            this.clearForm();
+        },
+        clearForm() {
+            this.$v.$reset()
+            this.form.name = null
+            this.form.home = null
+            this.form.away = null
+            this.form.championship = null
         }
     }
 }

@@ -9,13 +9,62 @@
   </div>
   <div class="md-layout">
     <div class="md-layout-item md-size-25">
-        <md-dialog :md-active.sync="showDialog">
-            <md-dialog-title>Create Match</md-dialog-title>
-            <md-dialog-actions>
-              <md-button class="md-primary" v-on:click="newMatch()">Create</md-button>
-              <md-button class="md-danger" @click="showDialog = false">Close</md-button>
-            </md-dialog-actions>
-          </md-dialog>
+      <md-dialog :md-active.sync="showDialog">
+        <md-dialog-title>Create Match</md-dialog-title>
+        <div>
+          <form novalidate class="md-layout" @submit.prevent="newMatch">
+            <div class="md-layout md-gutter">
+              <div class="md-layout-item md-small-size-100">
+                <md-field :class="getValidationClass('name')">
+                  <label for="name">Name</label>
+                  <md-input name="name" id="name" autocomplete="given-name" v-model="form.name"/>
+                  <span class="md-error" v-if="!$v.form.name.required">Name is required</span>
+                  <span class="md-error" v-else-if="!$v.form.name.minlength">Invalid name</span>
+                </md-field>
+              </div>
+              <div class="md-layout-item md-small-size-100">
+                <md-field :class="getValidationClass('championship')">
+                  <label for="championship">Championship</label>
+                  <md-select name="championship" id="championship" v-model="form.championship">
+                    <md-option></md-option>
+                    <md-option value="seriea">Serie A(ITA)</md-option>
+                    <md-option value="premier">Premier League(ENG)</md-option>
+                    <md-option value="liga">Liga(SPA)</md-option>
+                    <md-option value="ligue1">Ligue 1(FRA)</md-option>
+                    <md-option value="bundesliga">Bundesliga(GER)</md-option>
+                  </md-select>
+                  <span class="md-error" v-if="!$v.form.championship.required">The Champioship is required</span>
+                </md-field>
+              </div>
+            </div>
+
+            <div class="md-layout md-gutter">
+              <div class="md-layout-item md-small-size-100">
+                <md-field :class="getValidationClass('home')">
+                  <label for="home">Home name</label>
+                  <md-input name="home" id="home" autocomplete="given-home" v-model="form.home"/>
+                  <span class="md-error" v-if="!$v.form.home.required">The Home name is required</span>
+                  <span class="md-error" v-else-if="!$v.form.home.minlength">Invalid Home name</span>
+                </md-field>
+              </div>
+
+              <div class="md-layout-item md-small-size-100">
+                <md-field :class="getValidationClass('away')">
+                  <label for="away">Away Name</label>
+                  <md-input name="away" id="away" autocomplete="given-away" v-model="form.away"/>
+                  <span class="md-error" v-if="!$v.form.away.required">The Away name is required</span>
+                  <span class="md-error" v-else-if="!$v.form.away.minlength">Invalid Away name</span>
+                </md-field>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <md-dialog-actions>
+          <md-button class="md-primary" v-on:click="newMatch()">Create</md-button>
+          <md-button class="md-danger" @click="closeDialog">Close</md-button>
+        </md-dialog-actions>
+      </md-dialog>
       <md-button v-on:click="showDialog = true" class="md-primary md-raised">New</md-button>
       <md-list>
         <md-list-item v-for="match in matchs" v-bind:data="match" v-bind:key="match.name">
